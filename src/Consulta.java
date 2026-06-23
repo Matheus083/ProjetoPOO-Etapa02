@@ -1,4 +1,4 @@
-public class Consulta {
+public class Consulta implements Agendavel {
     public String cpfPaciente;
     public String nomeProfissional;
     public String data;
@@ -35,17 +35,18 @@ public class Consulta {
         this.tipo = tipo;
         this.status = status;
     }
-
+    @Override
     public void cancelar() {
         this.status = "cancelada";
     }
+
 
     // cancelar com motivo - retorna a msg formatada
     public String cancelar(String motivo) {
         this.status = "cancelada";
         return "Consulta cancelada. Motivo: " + motivo;
     }
-
+    @Override
     public void remarcar() {
         this.status = "remarcada";
     }
