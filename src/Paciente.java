@@ -1,63 +1,67 @@
-public class Paciente {
-    public String nome;
-    public String cpf;
-    public int idade;
-    public String telefone;
-    public String convenioNome;
-    public boolean ativo;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Paciente(String nome, String cpf) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.idade = 0;
-        this.telefone = "";
-        this.convenioNome = "";
-        this.ativo = true;
+public class Paciente extends Pessoa {
+
+    List<Paciente> pacientes = new ArrayList<>();
+
+    private String email;
+    private String convenio;
+    private String telefone;
+    private int idade;
+    private String sexo;
+
+   protected Paciente(String nome, String cpf){
+        super(nome, cpf);
     }
 
-    public Paciente(String nome, String cpf, int idade, String telefone) {
-        this.nome = nome;
-        this.cpf = cpf;
+    protected Paciente (String nome, String cpf, String telefone, int idade, String sexo){
+       super(nome, cpf);
+       this.telefone = telefone;
         this.idade = idade;
-        this.telefone = telefone;
-        this.convenioNome = "";
-        this.ativo = true;
     }
 
-    // construtor com todos os dados
-    public Paciente(String nome, String cpf, int idade, String telefone, String convenioNome) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.idade = idade;
-        this.telefone = telefone;
-        this.convenioNome = convenioNome;
-        this.ativo = true;
+    protected Paciente(String nome, String cpf, String email, String convenio){
+        super(nome, cpf);
+        this.email = email;
+        this.convenio = convenio;
     }
 
-    // atualiza so idade e telefone
-    public void complementar(int idade, String telefone) {
-        this.idade = idade;
-        this.telefone = telefone;
+    //Inicialização de Paciente
+    protected Paciente(){}
+    //Acesso dos dados para outra classe
+    public String getEmail() {
+        return email;
+    }
+    public String getConvenio() {
+        return convenio;
     }
 
-    // atualiza tudo incluindo convenio
-    public void complementar(int idade, String telefone, String convenioNome) {
-        this.idade = idade;
-        this.telefone = telefone;
-        this.convenioNome = convenioNome;
+    //Método para cadastrar o paciente
+    protected void cadastroPaciente(Paciente p){
+
+    //Verificação de existência do paciente no sistema
+       for (Paciente paciente : pacientes) {
+
+           if(paciente.getcpf().equals(p.getcpf())){
+               System.out.println("Paciente já cadastrado no sistema.");
+               return;
+           }
+           //Caso não exista, paciente novo é cadastrado
+           pacientes.add(paciente);
+           System.out.println("Paciente cadastrado com sucesso");
+       }
     }
 
-    public void desativar() {
-        this.ativo = false;
+    //Método para exibir os dados do paciente
+    protected void exibirDados()
+    {
+        System.out.println("====| Dados do Paciente |====\n");
+        super.exibirDados();
+        System.out.println("Telefone: " + this.telefone);
+        System.out.println("Idade: " + this.idade);
+        System.out.println("Sexo: " + this.sexo);
+        System.out.println("Convenio: " + this.convenio);
     }
 
-    public String exibirResumo() {
-        String status = "Sim";
-        if (!ativo) {
-            status = "Nao";
-        }
-        return "Nome: " + nome + " | CPF: " + cpf + " | Idade: " + idade
-                + " | Tel: " + telefone + " | Convenio: " + convenioNome
-                + " | Ativo: " + status;
-    }
 }
