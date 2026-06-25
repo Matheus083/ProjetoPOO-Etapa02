@@ -1,0 +1,49 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
+//Classe que reúne a lógica de negócio da clínica
+public class ClinicaServico {
+    
+    private List<Pessoa> pessoas = new ArrayList<>(); //Lista de todas as pessoas cadastradas no sistema
+    private HashMap<String, Paciente> mapaPacientes = new HashMap<>(); //Dicionário de pacientes
+    private HashSet<String> cpfsCadastrados = new HashSet<>(); //Set para garantir que não existirão cpfs repetidos no sistema
+
+    //Cadastra Pacientes
+    public void cadastrarPaciente(Paciente novoPaciente){
+
+        String cpf = novoPaciente.getcpf();
+
+        //Validando se o cpf já existe nos cadastros
+        if(cpfsCadastrados.contains(cpf)){
+            System.out.println("Erro: Paciente já cadastrado!"); // TODO: Implementar exception
+            return;
+        }
+        //Se o cpf for novo, adiciona nas coleções
+        cpfsCadastrados.add(cpf); //Set
+        mapaPacientes.put(cpf, novoPaciente);
+        pessoas.add(novoPaciente);
+        novoPaciente.setStatus("Ativo"); //Define o status do paciente como ativo
+        System.out.println("Cadastro finalizado");
+    }
+
+    //Atualiza o cadastro de Pacientes com idade e telefone
+    public void atualizarPaciente(Paciente p, int idade, String telefone){
+        
+        p.setIdade(idade);
+        p.setTelefone(telefone);
+    }
+
+    //SOBRECARGA: Atualiza o cadastro de Pacientes com idade, telefone e Convenio
+    public void atualizarPaciente(Paciente p, int idade, String telefone, Convenio convenio){
+        p.setIdade(idade);
+        p.setTelefone(telefone);
+        p.setConvenio(convenio);
+    }
+
+    //Busca um paciente pelo cpf no Dicionário
+    public Paciente retornarPaciente(String cpf){
+        return mapaPacientes.get(cpf); //TODO: implementar excessão pra caso não encontre
+    }
+}
