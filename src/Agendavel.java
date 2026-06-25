@@ -1,7 +1,4 @@
 public interface Agendavel {
-
-    void cancelar();
-
-    void remarcar();
-
+    void cancelar() throws Exception;
+    void remarcar() throws Exception;
 }
