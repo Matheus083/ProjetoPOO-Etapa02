@@ -7,15 +7,15 @@ public abstract class Pessoa {
         this.cpf = cpf;
     }
 
-   public String getnome(){
-        return nome;
-    }
+
 
     //Métodos para acesso em outras classes
-    public String getcpf(){
+    public String getCpf(){
         return cpf;
     }
-
+    public String getNome(){
+        return nome;
+    }
 
     //Método para mostrar dados do objeto
     protected void exibirDados(){
@@ -24,6 +24,21 @@ public abstract class Pessoa {
 
     }
 
-    protected Pessoa(){}
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome inválido! O nome do cadastro é obrigatório.");
+        }
+        this.nome = nome;
+    }
+
+    public void setCpf(String cpf) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            throw new IllegalArgumentException("CPF inválido! CPF do cadastro é obrigatório");
+        }
+        this.cpf = cpf;
+    }
+
+    protected Pessoa(){
+    }
 
 }
