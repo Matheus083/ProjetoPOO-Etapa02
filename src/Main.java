@@ -1,6 +1,8 @@
 import java.util.Scanner;
 
 public class Main {
+    static Agenda agenda = new Agenda();
+
     static Paciente[] pacientes = new Paciente[100];
     static int totalPacientes = 0;
 
@@ -372,8 +374,14 @@ public class Main {
             return;
         }
 
+        // TODO mover totalmente para Agenda.
         // verifica conflito
-        if (temConflito(nomeProf, data, horario)) {
+        if (agenda.existeConflito(
+                consultas,
+                totalConsultas,
+                nomeProf,
+                data,
+                horario)) {
             System.out.println("Horario ocupado!");
             String sugestao = sugerirHorario(nomeProf, data);
             if (sugestao.equals("")) {
