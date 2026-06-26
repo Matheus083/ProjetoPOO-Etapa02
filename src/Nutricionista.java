@@ -12,3 +12,5 @@ public class Nutricionista extends Profissional {
         super(nome, cpf, "Nutrição", registro, valorConsulta);
     }
 }
+
+//a

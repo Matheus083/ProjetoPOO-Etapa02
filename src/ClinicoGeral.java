@@ -11,3 +11,5 @@ public class ClinicoGeral extends Profissional {
         super(nome, cpf, "Clínica Geral", registro, valorConsulta);
     }
 }
+
+//a

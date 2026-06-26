@@ -11,3 +11,5 @@ public class Psicologo extends Profissional {
         super(nome, cpf, "Psicologia", registro, valorConsulta);
     }
 }
+
+//a
