@@ -11,3 +11,6 @@ public class Fisioterapeuta extends Profissional {
         super(nome, cpf, "Fisioterapia", registro, valorConsulta);
     }
 }
+
+
+//a
