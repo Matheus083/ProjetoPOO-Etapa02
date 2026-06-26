@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
 public class Main {
+
+    static ClinicaServico cs = new ClinicaServico();
+
     static Agenda agenda = new Agenda();
 
     static Paciente[] pacientes = new Paciente[100];
@@ -78,40 +81,45 @@ public class Main {
         }
     }
 
+    //Cadastro de pacientes
     public static void cadastrarPaciente() {
         System.out.print("Nome: ");
         String nome = sc.nextLine();
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
 
-        // verifica se ja existe
-        if (buscarIndicePaciente(cpf) != -1) {
-            System.out.println("CPF ja cadastrado!");
-            return;
-        }
-
+        //tipo do cadastro
         System.out.print("Tipo (1-Minimo / 2-Com idade e tel / 3-Completo): ");
         int tipo = Integer.parseInt(sc.nextLine());
+        Paciente paciente;
 
-        if (tipo == 1) {
-            pacientes[totalPacientes] = new Paciente(nome, cpf);
-        } else if (tipo == 2) {
-            System.out.print("Idade: ");
-            int idade = Integer.parseInt(sc.nextLine());
-            System.out.print("Telefone: ");
-            String tel = sc.nextLine();
-            pacientes[totalPacientes] = new Paciente(nome, cpf, idade, tel);
-        } else {
-            System.out.print("Idade: ");
-            int idade = Integer.parseInt(sc.nextLine());
-            System.out.print("Telefone: ");
-            String tel = sc.nextLine();
-            System.out.print("Convenio: ");
-            String conv = sc.nextLine();
-            pacientes[totalPacientes] = new Paciente(nome, cpf, idade, tel, conv);
+        //Estrutura de decisão para executar o tipo correto de cadastro
+        switch(tipo){
+            case 1:
+                paciente = new Paciente(nome, cpf);
+                cs.cadastrarPaciente(paciente);
+                break; 
+            case 2:
+                System.out.print("Idade: ");
+                int idade = Integer.parseInt(sc.nextLine());
+                System.out.print("Telefone: ");
+                String tel = sc.nextLine();
+                paciente = new Paciente(nome, cpf, idade, tel);
+                cs.cadastrarPaciente(paciente);
+                break;
+            case 3:
+                System.out.print("Idade: ");
+                idade = Integer.parseInt(sc.nextLine());
+                System.out.print("Telefone: ");
+                tel = sc.nextLine();
+                System.out.print("Convenio: ");
+                String conv = sc.nextLine(); //TODO: Substituir por informações do Convênio depois
+                paciente = new Paciente(nome, cpf, idade, tel, conv);
+                cs.cadastrarPaciente(paciente);
+                break;
         }
-        totalPacientes++;
-        System.out.println("Paciente cadastrado com sucesso!");
+        
+        System.out.println("Cadastro finalizado");
     }
 
     public static void complementarPaciente() {
