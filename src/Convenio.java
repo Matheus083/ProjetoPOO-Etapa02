@@ -14,7 +14,7 @@ public class Convenio {
         // Chamando o setter para garantir a validação de limite
         setpercentualConvenio(percentual);
 
-        // Inicializando a lista copiando os dados recebidos 
+        // Inicializando a lista copiando os dados recebidos
         if (especialidades != null) {
             this.especialidades = new ArrayList<>(especialidades);
         } else {
