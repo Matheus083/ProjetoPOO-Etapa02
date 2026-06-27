@@ -4,7 +4,6 @@ public abstract class Pagamento {
     private String tipoPagamento;
     private String status;
 
-    //Construtor para status do pagamento
     public Pagamento(int indiceConsulta, double valorBase, String tipoPagamento) {
         this.indiceConsulta = indiceConsulta;
         this.valorBase = valorBase;
@@ -12,7 +11,7 @@ public abstract class Pagamento {
         this.status = "PAGO";
     }
 
-    //Getters e Setters
+    //getters e setters
     public int getIndiceConsulta() { return this.indiceConsulta; }
     public void setIndiceConsulta(int indiceConsulta) { this.indiceConsulta = indiceConsulta; }
 
@@ -25,13 +24,31 @@ public abstract class Pagamento {
     public String getStatus() { return this.status; }
     public void setStatus(String status) { this.status = status; }
 
-    //Calcula valor final
+    //método abstrato para o valor final
     public abstract double calcularValorFinal();
 
+    //método concreto para exibir resumo
     public String exibirResumo() {
+        double valorArredondado = Math.round(calcularValorFinal() * 100.0) / 100.0;
         return "Consulta #" + this.indiceConsulta +
-                " | Valor Base: R$" + this.valorBase +
+                " | Valor Final: R$" + valorArredondado +
                 " | Tipo: " + this.tipoPagamento +
                 " | Status: " + this.status;
+    }
+
+    public static double calcularValor(double valorBase) {
+        return valorBase;
+    }
+
+    public static double calcularValor(double valorBase, double percentualDesconto) {
+        double desconto = valorBase * percentualDesconto / 100;
+        double valor = valorBase - desconto;
+        return valor < 0 ? 0 : valor;
+    }
+
+    public static double calcularValor(double valorBase, double percentualDesconto, double multa) {
+        double desconto = valorBase * percentualDesconto / 100;
+        double valor = valorBase - desconto + multa;
+        return valor < 0 ? 0 : valor;
     }
 }
