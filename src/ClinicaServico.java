@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 
 //Classe que reúne a lógica de negócio da clínica
 public class ClinicaServico {
@@ -26,7 +27,7 @@ public class ClinicaServico {
         cpfsCadastrados.add(cpf); //Set
         mapaPacientes.put(cpf, novoPaciente);
         todasAsPessoas.add(novoPaciente);
-        novoPaciente.setStatus("Ativo"); //Define o status do paciente como ativo
+        novoPaciente.setStatus(true); //Define o status do paciente como ativo
         System.out.println("Cadastro finalizado");
     }
 
@@ -52,7 +53,7 @@ public class ClinicaServico {
     }
 
     //Listar todos os Pacientes
-    public void listarPacientes(String cpf){
+    public void listarPacientes(){
 
         //Percorre a lista de Pessoas e chama exibirResumo() só quando a pessoa for um Paciente
         for(Pessoa p : todasAsPessoas){
@@ -66,6 +67,138 @@ public class ClinicaServico {
     public void desativarPaciente(String cpf){
 
         //Procura o Paciente no dicionário e altera seu atributo status
-        buscarPorCpf(cpf).setStatus("Inativo");
+        buscarPorCpf(cpf).setStatus(false);
     }
+/* ============================================================== */
+/*=======================| PROFISSIONAL |========================*/ 
+    private HashMap<String, Profissional> mapaProfissionais = new HashMap<>(); //Dicionário de profissionais
+    
+    //Cadastrar profissionais
+    public void cadastrarProfissional(Profissional novoProfissional){
+        
+        String nome = novoProfissional.getNome();
+
+        //Adiciona nas coleções
+        mapaProfissionais.put(nome, novoProfissional);
+        todasAsPessoas.add(novoProfissional);
+        System.out.println("Cadastro finalizado");
+    }
+
+    //Atualizar cadastro só com registro e valor de consultas
+    public void atualizarProfissional(String nome, String registro, double valorConsulta){
+
+        buscarProfissionalNome(nome).setRegistro(registro);
+        buscarProfissionalNome(nome).setValorConsulta(valorConsulta);
+    }
+
+    //SOBRECARGA: Atualizar cadastro completamente
+    public void atualizarProfissional(String nome, String registro, double valorConsulta, int quantosDias){
+
+        buscarProfissionalNome(nome).setRegistro(registro);
+        buscarProfissionalNome(nome).setValorConsulta(valorConsulta);
+        //leitura dos dias
+        Scanner sc = new Scanner(System.in);
+        for(int i = 1; i <= quantosDias; i++){
+            System.out.print("Dia " +i+ ": ");
+            String dia = sc.nextLine();
+            HorarioDisponivel dias = new HorarioDisponivel(dia, null);
+            buscarProfissionalNome(nome).adicionarHorario(dias);
+        }
+    }
+
+    //Buscar profissional por nome no Dicionário, retornando um objeto
+    private Profissional buscarProfissionalNome(String nome){
+        
+        //Verifica se a chave existe no mapa
+        if (mapaProfissionais == null || !mapaProfissionais.containsKey(nome)) {
+            System.out.println("Aviso: Chave não encontrada ou mapa inválido.");
+            return null; 
+        } //TODO: exception aqui pra validação
+
+        return mapaProfissionais.get(nome);
+    }
+
+    //Listar todos os profissionais
+    public void listarProfissionais(){
+
+        //Percorre a lista de Pessoas e exibe as informações só quando a pessoa for um Profissional
+        for(Pessoa p : todasAsPessoas){
+            if(p instanceof Profissional){
+                p.exibirDados();
+            }
+        }
+    }
+
+    //SOBRECARGA: Listar filtrando por especialidade.
+    public void listarProfissionais(int op){
+
+        switch(op){
+            case 1: //Clínico geral
+                for(Pessoa p : todasAsPessoas){
+                    if(p instanceof ClinicoGeral){
+                        p.exibirDados();
+                    }
+                }
+                break;
+            case 2: //Fisioterapeuta
+                for(Pessoa p : todasAsPessoas){
+                    if(p instanceof Fisioterapeuta){
+                        p.exibirDados();
+                    }
+                }
+                break;
+            case 3: //Nutricionista
+                for(Pessoa p : todasAsPessoas){
+                    if(p instanceof Nutricionista){
+                        p.exibirDados();
+                    }
+                }
+                break;
+            case 4: //Psicólogo
+                for(Pessoa p : todasAsPessoas){
+                    if(p instanceof Psicologo){
+                        p.exibirDados();
+                    }
+                }
+                break;
+        }
+    }
+
+/* ============================================================== */
+/*=========================| CONSULTA |=========================*/
+    //criação do objeto agenda para realizar algumas operações relacionadas à consultas, bem como armazenar as consultas
+    private Agenda agenda = new Agenda();
+
+    //Agendar (escolher profissional)
+    public void agendarConsulta(Consulta novConsulta, String cpf, String nomeProfissional, String data, String horario, String tipo){
+        
+        agenda.agendarConsulta(novaConsulta, cpf, nomeProfissional, data, horario, tipo);
+    }
+
+    //Cancelar
+    public void cancelarConsulta(String cpf, String data, String horario, String motivo)
+        throws OperacaoInvalidaException{
+
+        agenda.cancelarConsulta(cpf, data, horario, motivo);
+    }
+
+    //Remarcar
+    public void remarcarConsulta(String cpf, String novaData, String novoHorario)
+        throws OperacaoInvalidaException{
+
+        agenda.remarcarConsulta(cpf, novaData, novoHorario);
+    }
+
+    //Listar todas as consultas
+    public void listarConsultas(){
+        agenda.exibirResumoConsultas();
+    }
+
+    //Buscar por CPF
+    public void buscarConsultasPorCpf(String cpf)
+        throws OperacaoInvalidaException{
+        agenda.buscaPorCpf(cpf);
+    }
+/* ============================================================== */
+
 }
