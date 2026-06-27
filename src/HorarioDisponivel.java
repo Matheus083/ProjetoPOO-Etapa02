@@ -15,4 +15,12 @@ public class HorarioDisponivel {
     public String getHorario() {
         return horario;
     }
+
+    public void setDiaSemana(String diaSemana){
+        this.diaSemana = diaSemana;
+    }
+
+    public void setHorario(String horario){
+        this.horario = horario;
+    }
 }

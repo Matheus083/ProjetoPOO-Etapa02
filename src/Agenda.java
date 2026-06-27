@@ -80,6 +80,43 @@ public class Agenda {
         }
     }
 
+    //Método Centralizado de Remarcação.
+    public void remarcarConsulta(String cpfPaciente, String novaData, String novoHorario)
+        throws OperacaoInvalidaException {
+
+        boolean encontrada = false;
+        for (Consulta c : listaConsultas) {
+            if (c.cpfPaciente.equals(cpfPaciente) && c.data.equals(novaData) && c.horario.equals(novoHorario)) {
+                c.data = novaData;
+                c.horario = novoHorario;    
+                c.remarcar();
+                encontrada = true;
+                System.out.println("Sucesso: " + c.exibirResumo());
+                break;
+            }
+        }
+        if (!encontrada) {
+            throw new OperacaoInvalidaException("Erro: Nenhuma consulta ativa encontrada para os dados informados.");
+        }        
+    }
+
+    //Método para buscar uma consulta pelo cpf do Paciente
+    public void buscaPorCpf(String cpf)
+        throws OperacaoInvalidaException {
+        
+        boolean encontrada = false;
+        for (Consulta c : listaConsultas) {
+            if(c.cpfPaciente.equals(cpf)){
+                System.out.println(c.exibirResumo());
+                encontrada = true;
+                break;
+            }
+        }
+        if (!encontrada) {
+            throw new OperacaoInvalidaException("Erro: Nenhuma consulta ativa encontrada para os dados informados.");
+        }
+    }
+
     /**
      * MÉTODO DE RESUMO COMPLETO.
      */

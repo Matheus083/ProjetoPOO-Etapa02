@@ -255,7 +255,7 @@ public class Main {
             return;
         }
 
-        System.out.print("Vai informar dias? (1-Nao / 2-Sim): ");
+        System.out.print("Vai informar dias de disponibilidade? (1-Nao / 2-Sim): ");
         int tipo = Integer.parseInt(sc.nextLine());
 
         System.out.print("Registro: ");
