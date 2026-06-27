@@ -10,8 +10,16 @@ public class Convenio {
 
     public Convenio (String nomeConvenio, double percentual, List<String> especialidades) {
         this.nomeConvenio = nomeConvenio;
-        this.percentual = percentual;
-        this.especialidades = new ArrayList<>();
+
+        // Chamando o setter para garantir a validação de limite
+        setpercentualConvenio(percentual);
+
+        // Inicializando a lista copiando os dados recebidos 
+        if (especialidades != null) {
+            this.especialidades = new ArrayList<>(especialidades);
+        } else {
+            this.especialidades = new ArrayList<>();
+        }
     }
 
     //Getters para acesso aos dados
