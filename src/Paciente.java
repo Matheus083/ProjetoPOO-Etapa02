@@ -45,6 +45,17 @@ public class Paciente extends Pessoa {
         this.status = status;
     }
 
+    public Paciente (String nome, String cpf, String email, String sexo, boolean status, Convenio convenio, String telefone, int idade){
+        super(nome, cpf);
+        this.email = email;
+        this.sexo = sexo;
+        this.telefone = telefone;
+        this.idade = idade;
+        this.status = status;
+        this.convenio = convenio;
+
+    }
+
     //Inicialização de Paciente
     public Paciente(){
     }

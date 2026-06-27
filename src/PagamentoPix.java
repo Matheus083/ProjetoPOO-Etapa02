@@ -1,23 +1,29 @@
-public class PagamentoPix extends Pagamento {
+public class PagamentoPix extends Pagamento implements Exportavel {
     private String chavePix;
-    private double descontoPix;
 
-
-    public PagamentoPix(int indiceConsulta, double valorBase, String chavePix, double descontoPix) {
+    public PagamentoPix(int indiceConsulta, double valorBase, String chavePix) {
         super(indiceConsulta, valorBase, "Pix");
         this.chavePix = chavePix;
-        this.descontoPix = descontoPix;
     }
 
-    //implementação da regra do Pix: valor base - desconto
+
     @Override
     public double calcularValorFinal() {
-        return this.getValorBase() * (1 - descontoPix);
+        // já apliquei o desconto de 5% também
+        return this.getValorBase() * 0.95;
     }
 
-    //getters e setters específicos do Pix
-    public String getChavePix() { return chavePix; }
+    @Override
+    public String exibirResumo() {
+        return super.exibirResumo() + " | Chave Pix: " + this.chavePix;
+    }
+
+    @Override
+    public String exportarDados() {
+        return "PIX;" + getIndiceConsulta() + ";" + getValorBase() + ";" + calcularValorFinal();
+    }
+
+    //getters e settsers
+    public String getChavePix() { return this.chavePix; }
     public void setChavePix(String chavePix) { this.chavePix = chavePix; }
-    public double getDescontoPix() { return descontoPix; }
-    public void setDescontoPix(double descontoPix) { this.descontoPix = descontoPix; }
 }
