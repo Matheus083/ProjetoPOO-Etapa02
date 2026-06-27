@@ -7,9 +7,11 @@ public abstract class Pessoa {
         this.cpf = cpf;
     }
 
+    //Inicialização de Pessoa
+    public Pessoa(){
+    }
 
-
-    //Métodos para acesso em outras classes
+    //Getters para acesso aos dados
     public String getCpf(){
         return cpf;
     }
@@ -38,7 +40,6 @@ public abstract class Pessoa {
         this.cpf = cpf;
     }
 
-    protected Pessoa(){
-    }
+
 
 }
