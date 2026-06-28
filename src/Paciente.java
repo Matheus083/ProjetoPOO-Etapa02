@@ -1,10 +1,8 @@
 
 public class Paciente extends Pessoa {
 
-    private String email;
     private String telefone;
     private int idade;
-    private String sexo;
     private boolean status;
 
     /*Associação entre a Classe "Convenio" e a Classe "Paciente"
@@ -12,47 +10,39 @@ public class Paciente extends Pessoa {
      */
     private Convenio convenio;
 
-    public Paciente(String nome, String cpf, boolean status){
+    public Paciente(String nome, String cpf){
         super(nome, cpf);
-        this.status = status;
+        this.status = true;
     }
 
-    public Paciente (String nome, String cpf, String telefone, int idade, String sexo, boolean status, Convenio convenio){
+    public Paciente (String nome, String cpf, String telefone, int idade, Convenio convenio){
         super(nome, cpf);
         this.telefone = telefone;
         this.idade = idade;
-        this.sexo = sexo;
-        this.status = status;
+        this.status = true;
         this.convenio = convenio;
     }
 
-    public Paciente (String nome, String cpf, Convenio convenio, int idade, String sexo){
+    public Paciente (String nome, String cpf, Convenio convenio, int idade){
         super(nome, cpf);
         this.idade = idade;
-        this.sexo = sexo;
         this.convenio = convenio;
+        this.status = true;
     }
 
-    public Paciente (String nome, String cpf, String sexo, int idade){
+    public Paciente (String nome, String cpf, int idade, String telefone){
         super(nome, cpf);
         this.idade = idade;
-        this.sexo = sexo;
+        this.telefone = telefone;
+        this.status = true;
     }
 
-    public Paciente(String nome, String cpf, String email, boolean status){
+    public Paciente (String nome, String cpf, Convenio convenio, String telefone, int idade){
         super(nome, cpf);
-        this.email = email;
-        this.status = status;
-    }
-
-    public Paciente (String nome, String cpf, String email, String sexo, boolean status, Convenio convenio, String telefone, int idade){
-        super(nome, cpf);
-        this.email = email;
-        this.sexo = sexo;
         this.telefone = telefone;
         this.idade = idade;
-        this.status = status;
         this.convenio = convenio;
+        this.status = true;
 
     }
 
@@ -60,10 +50,8 @@ public class Paciente extends Pessoa {
     public Paciente(){
     }
     //Getters para acesso aos dados
-    public String getEmail() {return this.email; }
     public String getTelefone() { return this.telefone; }
     public int getIdade() { return this.idade; }
-    public String getSexo() { return this.sexo; }
     public boolean isStatus() { return this.status; }
     public Convenio getConvenio(){return this.convenio;}
 
@@ -86,13 +74,6 @@ public class Paciente extends Pessoa {
         super.setCpf(cpf);
     }
 
-    public void setEmail(String email){
-        if (email == null || email.trim().isEmpty() || !email.contains("@")) {
-            throw new IllegalArgumentException("Email inválido para cadastro!");
-        }
-        this.email = email;
-    }
-
     public void setTelefone(String telefone){
         if (telefone == null || telefone.trim().isEmpty()) {
             throw new IllegalArgumentException("Número inválido! Telefone obrigatório para cadastro!");
@@ -107,16 +88,6 @@ public class Paciente extends Pessoa {
         this.idade = idade;
     }
 
-    public void setSexo(String sexo) {
-        if (sexo == null || sexo.trim().isEmpty()) {
-            throw new IllegalArgumentException("Sexo obrigatório para cadastro!");
-        }
-        String sexoUpper = sexo.toUpperCase().trim();
-        if (!("M".equals(sexoUpper) || "F".equals(sexoUpper))) {
-            throw new IllegalArgumentException("Sexo inválido para cadastro! Use 'M' ou 'F'.");
-        }
-        this.sexo = sexoUpper;
-    }
     public void setStatus(boolean status){
         this.status = status;
     }
@@ -139,8 +110,6 @@ public class Paciente extends Pessoa {
         System.out.println("Nome do paciente: " + getNome());
         System.out.println("CPF do paciente: " + getCpf());
         System.out.println("Idade do paciente: " + this.idade);
-        System.out.println("Sexo do paciente: " + this.sexo);
-        System.out.println("Email do paciente: " + this.email);
         System.out.println("Telefone do paciente: " + this.telefone);
         System.out.println("Status do paciente: " + this.status);
         System.out.println("=======================================");

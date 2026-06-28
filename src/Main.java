@@ -2,28 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    static ClinicaServico cs = new ClinicaServico();
-
-    static Agenda agenda = new Agenda();
-
-    static Paciente[] pacientes = new Paciente[100];
-    static int totalPacientes = 0;
-
-    static Profissional[] profissionais = new Profissional[50];
-    static int totalProfissionais = 0;
-
-    static Consulta[] consultas = new Consulta[200];
-    static int totalConsultas = 0;
-
-    static Atendimento[] atendimentos = new Atendimento[200];
-    static int totalAtendimentos = 0;
-
-    static Pagamento[] pagamentos = new Pagamento[200];
-    static int totalPagamentos = 0;
-
-    static double[] multas = new double[100];
-    static int totalMultas = 0;
-
+    static ClinicaServico cs = new ClinicaServico(); //Objeto para realizar operações de regra de negócio
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -59,7 +38,7 @@ public class Main {
     public static void menuPacientes() {
         int op = -1;
         while (op != 0) {
-            System.out.println("\n--- PACIENTES ---");
+            System.out.println("\n============| PACIENTES |============");
             System.out.println("1 - Cadastrar");
             System.out.println("2 - Complementar cadastro");
             System.out.println("3 - Buscar por CPF");
@@ -88,50 +67,17 @@ public class Main {
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
 
-        //tipo do cadastro
-        System.out.print("Tipo (1-Minimo / 2-Com idade e tel / 3-Completo): ");
-        int tipo = Integer.parseInt(sc.nextLine());
-        Paciente paciente;
-
-        //Estrutura de decisão para executar o tipo correto de cadastro
-        switch(tipo){
-            case 1:
-                paciente = new Paciente(nome, cpf);
-                cs.cadastrarPaciente(paciente);
-                break; 
-            case 2:
-                System.out.print("Idade: ");
-                int idade = Integer.parseInt(sc.nextLine());
-                System.out.print("Telefone: ");
-                String tel = sc.nextLine();
-                paciente = new Paciente(nome, cpf, idade, tel);
-                cs.cadastrarPaciente(paciente);
-                break;
-            case 3:
-                System.out.print("Idade: ");
-                idade = Integer.parseInt(sc.nextLine());
-                System.out.print("Telefone: ");
-                tel = sc.nextLine();
-                System.out.print("Convenio: ");
-                String conv = sc.nextLine(); //TODO: Substituir por informações do Convênio depois
-                paciente = new Paciente(nome, cpf, idade, tel, conv);
-                cs.cadastrarPaciente(paciente);
-                break;
-        }
+        cs.cadastrarPaciente(nome, cpf);
         
         System.out.println("Cadastro finalizado");
     }
 
+    //Atualização de pacientes
     public static void complementarPaciente() {
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
-        int idx = buscarIndicePaciente(cpf);
-        if (idx == -1) {
-            System.out.println("Paciente nao encontrado.");
-            return;
-        }
 
-        System.out.print("Vai informar convenio? (1-Nao / 2-Sim): ");
+        System.out.print("Vai informar convenio? (1- Sim / 2- Não): ");
         int tipo = Integer.parseInt(sc.nextLine());
 
         System.out.print("Idade: ");
@@ -140,11 +86,11 @@ public class Main {
         String tel = sc.nextLine();
 
         if (tipo == 1) {
-            pacientes[idx].complementar(idade, tel);
+            cs.atualizarPaciente(cpf, idade, tel);
         } else {
             System.out.print("Convenio: ");
-            String conv = sc.nextLine();
-            pacientes[idx].complementar(idade, tel, conv);
+            String nomeConvenio = sc.nextLine();
+            cs.atualizarPaciente(cpf, idade, tel, nomeConvenio);
         }
         System.out.println("Cadastro atualizado!");
     }
@@ -152,41 +98,20 @@ public class Main {
     public static void buscarPaciente() {
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
-        int idx = buscarIndicePaciente(cpf);
-        if (idx == -1) {
-            System.out.println("Paciente nao encontrado.");
-        } else {
-            System.out.println(pacientes[idx].exibirResumo());
-        }
+
+        cs.buscarPorCpf(cpf);
     }
 
     public static void listarPacientes() {
-        if (totalPacientes == 0) {
-            System.out.println("Nenhum paciente cadastrado.");
-            return;
-        }
-        for (int i = 0; i < totalPacientes; i++) {
-            System.out.println(pacientes[i].exibirResumo());
-        }
+        System.out.println("=====| LISTA DE PACIENTES |=====");
+        cs.listarPacientes();
     }
 
     public static void desativarPaciente() {
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
-        int idx = buscarIndicePaciente(cpf);
-        if (idx == -1) {
-            System.out.println("Paciente nao encontrado.");
-        } else {
-            pacientes[idx].desativar();
-            System.out.println("Paciente desativado.");
-        }
-    }
 
-    public static int buscarIndicePaciente(String cpf) {
-        for (int i = 0; i < totalPacientes; i++) {
-            if (pacientes[i].cpf.equals(cpf)) return i;
-        }
-        return -1;
+        cs.desativarPaciente(cpf);
     }
 
     // ---- PROFISSIONAIS ----
@@ -217,7 +142,7 @@ public class Main {
     public static void cadastrarProfissional() {
         System.out.print("Nome: ");
         String nome = sc.nextLine();
-        System.out.print("Especialidade (clinica geral/fisioterapia/psicologia/nutricao): ");
+        System.out.print("Especialidade (clinica geral / fisioterapia / psicologia / nutricao): ");
         String esp = sc.nextLine();
 
         if (!Profissional.especialidadeValida(esp)) {

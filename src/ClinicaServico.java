@@ -15,36 +15,68 @@ public class ClinicaServico {
     private HashSet<String> cpfsCadastrados = new HashSet<>(); //Set para garantir que não existirão cpfs repetidos no sistema
 
     //Cadastra Pacientes
-    public void cadastrarPaciente(Paciente novoPaciente){
+    public void cadastrarPaciente(String nome, String cpf){
 
-        String cpf = novoPaciente.getCpf();
-
-        //Validando se o cpf já existe nos cadastros
+        /*Validando se o cpf já existe nos cadastros
+          Se o cpf for novo, adiciona nas coleções*/
         if(cpfsCadastrados.contains(cpf)){
             System.out.println("Erro: Paciente já cadastrado!"); // TODO: Implementar exception
             return;
         }
-        //Se o cpf for novo, adiciona nas coleções
+
         cpfsCadastrados.add(cpf); //Set
-        mapaPacientes.put(cpf, novoPaciente);
-        todasAsPessoas.add(novoPaciente);
-        novoPaciente.setStatus(true); //Define o status do paciente como ativo
-        System.out.println("Cadastro finalizado");
+
+        //tipo do cadastro
+        System.out.print("Tipo (1-Minimo / 2-Com idade e tel / 3-Completo): ");
+        int tipo = Integer.parseInt(sc.nextLine());
+        Paciente paciente;
+
+        //Estrutura de decisão para executar o tipo correto de cadastro
+        switch(tipo){
+            case 1: //cadastro mínimo
+                paciente = new Paciente(nome, cpf);
+                mapaPacientes.put(cpf, paciente);
+                todasAsPessoas.add(paciente);
+                break; 
+            case 2: //cadastro simples + idade e telefone
+                System.out.print("Idade: ");
+                int idade = Integer.parseInt(sc.nextLine());
+                System.out.print("Telefone: ");
+                String tel = sc.nextLine();
+                paciente = new Paciente(nome, cpf, idade, tel);
+                mapaPacientes.put(cpf, paciente);
+                todasAsPessoas.add(paciente);
+                break;
+            case 3: //cadastro completo adicionando as informações de convênio
+                System.out.print("Idade: ");
+                idade = Integer.parseInt(sc.nextLine());
+                System.out.print("Telefone: ");
+                tel = sc.nextLine();
+                System.out.print("--- Informações do convênio ---");
+                String nomeConv = sc.nextLine();
+                Convenio conv = new Convenio(nomeConv);
+                paciente = new Paciente(nome, cpf, conv, tel, idade);
+                mapaPacientes.put(cpf, paciente);
+                todasAsPessoas.add(paciente);
+                break;
+        }
     }
 
     //Atualiza o cadastro de Pacientes com idade e telefone
-    public void atualizarPaciente(Paciente p, int idade, String telefone){
+    public void atualizarPaciente(String cpf, int idade, String telefone){
         
+        Paciente p = buscarPorCpf(cpf);
         p.setIdade(idade);
         p.setTelefone(telefone);
     }
 
     //SOBRECARGA: Atualiza o cadastro de Pacientes com idade, telefone e Convenio
-    public void atualizarPaciente(Paciente p, int idade, String telefone, Convenio convenio){
+    public void atualizarPaciente(String cpf, int idade, String telefone, String nomeConvenio){
         
+        Paciente p = buscarPorCpf(cpf);
         p.setIdade(idade);
         p.setTelefone(telefone);
-        p.setConvenio(convenio);
+        p.getConvenio().setNomeConvenio(nomeConvenio);
     }
 
     //Busca um paciente pelo cpf no Dicionário
@@ -75,14 +107,73 @@ public class ClinicaServico {
     private HashMap<String, Profissional> mapaProfissionais = new HashMap<>(); //Dicionário de profissionais
     
     //Cadastrar profissionais
-    public void cadastrarProfissional(Profissional novoProfissional){
+    public void cadastrarProfissional(String nome, String especialidade, int tipoCadastro){
         
-        String nome = novoProfissional.getNome();
+        Profissional profissional;
+        //cadastro simples com especialização
+        if (tipoCadastro == 1) {
+            switch(especialidade){
+                case "clinica geral":
+                    profissional = new ClinicoGeral(nome, especialidade);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+
+                case "fisioterapia":
+                    profissional = new Fisioterapeuta(nome, especialidade);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "psicologia":
+                    profissional = new Psicologo(nome, especialidade);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "nutricao":
+                    profissional = new Psicologo(nome, especialidade);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+            }
+        
+        //cadastro com numero de registro e valor de consulta
+        } else if (tipo == 2) {
+            System.out.print("Registro: ");
+            String reg = sc.nextLine();
+            System.out.print("Valor consulta: ");
+            double valor = Double.parseDouble(sc.nextLine());
+            profissionais[totalProfissionais] = new Profissional(nome, esp, reg, valor);
+
+        //cadastro completo com dias disponíveis    
+        } else {
+            System.out.print("Registro: ");
+            String reg = sc.nextLine();
+            System.out.print("Valor consulta: ");
+            double valor = Double.parseDouble(sc.nextLine());
+            System.out.print("Quantos dias atende? ");
+            int qtd = Integer.parseInt(sc.nextLine());
+            String[] dias = new String[7];
+            for (int i = 0; i < qtd; i++) {
+                System.out.print("Dia " + (i+1) + ": ");
+                dias[i] = sc.nextLine();
+            }
+            profissionais[totalProfissionais] = new Profissional(nome, esp, reg, valor, dias, qtd);
+        }
 
         //Adiciona nas coleções
         mapaProfissionais.put(nome, novoProfissional);
         todasAsPessoas.add(novoProfissional);
         System.out.println("Cadastro finalizado");
+    }
+
+    private boolean validarEspecialidade(String especialidade){
+        
+        if(especialidade.equalsIgnoreCase("clínica geral")){
+            return true
+        }
+        return false;
     }
 
     //Atualizar cadastro só com registro e valor de consultas

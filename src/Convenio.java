@@ -22,6 +22,12 @@ public class Convenio {
         }
     }
 
+    //Construtor simples
+    public Convenio (String nomeConvenio){
+
+        this.nomeConvenio = nomeConvenio;
+    }
+
     //Getters para acesso aos dados
     public String getNome(){
         return nomeConvenio;
@@ -40,13 +46,16 @@ public class Convenio {
         }
     }
 
-
     public boolean cobreEspecialidade(String especialidade){
         if (especialidade == null || especialidade.trim().isEmpty()){
             return false;
 
         }
         return this.especialidades.contains(especialidade.toLowerCase());
+    }
+
+    public void setNomeConvenio(String nome){
+        this.nomeConvenio = nome;
     }
 
     public void setpercentualConvenio(double percentual){
