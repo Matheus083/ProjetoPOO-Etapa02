@@ -45,3 +45,5 @@ public abstract class Profissional extends Pessoa {
     // Método para exibir o resumo específico do profissional
     public abstract void exibirResumo();
 }
+
+
