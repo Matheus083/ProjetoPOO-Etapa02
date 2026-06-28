@@ -8,7 +8,8 @@ import java.util.Scanner;
 public class ClinicaServico {
     
     private List<Pessoa> todasAsPessoas = new ArrayList<>(); //Lista de todas as pessoas cadastradas no sistema
-    
+    private Scanner sc = new Scanner(System.in);
+
 /*=========================| PACIENTE |=========================*/ 
     private HashMap<String, Paciente> mapaPacientes = new HashMap<>(); //Dicionário de pacientes
     private HashSet<String> cpfsCadastrados = new HashSet<>(); //Set para garantir que não existirão cpfs repetidos no sistema
@@ -97,7 +98,6 @@ public class ClinicaServico {
         buscarProfissionalNome(nome).setRegistro(registro);
         buscarProfissionalNome(nome).setValorConsulta(valorConsulta);
         //leitura dos dias
-        Scanner sc = new Scanner(System.in);
         for(int i = 1; i <= quantosDias; i++){
             System.out.print("Dia " +i+ ": ");
             String dia = sc.nextLine();
@@ -170,9 +170,10 @@ public class ClinicaServico {
     private Agenda agenda = new Agenda();
 
     //Agendar (escolher profissional)
-    public void agendarConsulta(Consulta novConsulta, String cpf, String nomeProfissional, String data, String horario, String tipo){
+    public void agendarConsulta(String cpf, String nomeProfissional, String data, String horario, String tipo)
+        throws HorarioIndisponivelException, OperacaoInvalidaException{
         
-        agenda.agendarConsulta(novaConsulta, cpf, nomeProfissional, data, horario, tipo);
+        agenda.agendarConsulta(cpf, nomeProfissional, data, horario, tipo);
     }
 
     //Cancelar
@@ -200,5 +201,63 @@ public class ClinicaServico {
         agenda.buscaPorCpf(cpf);
     }
 /* ============================================================== */
+/*=========================| ATENDIMENTO |=========================*/
+    private List<Consulta> consultas = agenda.getListaConsultas(); //Referência para a lista de consultas
+    private List<Atendimento> atendimentos = new ArrayList<>(); //Lista de atendimentos
 
+    //Registrar atendimento
+    public void registraAtendimento(Atendimento atendimento){
+        atendimentos.add(atendimento);
+    }
+
+/* ============================================================== */
+/*=========================| PAGAMENTOS |=========================*/
+    
+    private List<Pagamento> pagamentos = new ArrayList<>();
+    
+    //Registrar pagamento
+    public void registrarPagamento(String cpf) throws OperacaoInvalidaException{
+        
+        buscarConsultasPorCpf(cpf); //Exibe as consultas de um paciente
+
+        System.out.println("Selecione o índice da consulta que deseja realizar o pagamento:");
+        Integer indice = Integer.parseInt(sc.nextLine());
+
+        //Busca o profissional e o Paciente para acessar suas informações
+        Profissional pr = buscarProfissionalNome(consultas.get(indice).nomeProfissional);
+        Paciente pc = buscarPorCpf(cpf);
+
+        System.out.println("O valor base da consulta foi: " +pr.getValorConsulta()+ 
+            "\nQual a forma de pagamento desejada?\n(1) À vista | (2) Cartão | (3) Convênio");
+        Integer op = Integer.parseInt(sc.nextLine());
+
+        switch(op){
+            case 1: //À vista (pix ou dinheiro)
+                PagamentoPix pagamentoPix = new PagamentoPix(indice, pr.getValorConsulta(), "12345678910");
+                pagamentoPix.setValorTotal(pagamentoPix.calcularValorFinal());
+                pagamentos.add(pagamentoPix);
+                break;
+            case 2: //Pagamento com cartão de crédito
+                System.out.println("Em quantas parcelas o pagamento será dividido?");
+                Integer parcelas = Integer.parseInt(sc.nextLine());
+                System.out.println("Qual a bandeira do cartão?");
+                String bandeira = sc.nextLine();
+                PagamentoCartao pagamentoCartao = new PagamentoCartao(indice, pr.getValorConsulta(), bandeira, parcelas);
+                pagamentoCartao.setValorTotal(pagamentoCartao.calcularValorFinal());
+                pagamentos.add(pagamentoCartao);
+                break;
+            case 3: //Pagamento com convênio
+                PagamentoConvenio pagamentoConvenio = new PagamentoConvenio(indice, pr.getValorConsulta(), pc.getConvenio());
+                pagamentoConvenio.setValorTotal(pagamentoConvenio.calcularValorFinal());
+                pagamentos.add(pagamentoConvenio);
+                break;
+        }
+    }
+
+    //Listar todos os pagamentos
+    public void listarPagamentos(){
+        for (Pagamento p : pagamentos){
+            System.out.println(p.exibirResumo());
+        }
+    }
 }

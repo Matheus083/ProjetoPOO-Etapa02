@@ -1,6 +1,7 @@
 public abstract class Pagamento {
     private int indiceConsulta;
     private double valorBase;
+    protected double valorTotal;
     private String tipoPagamento;
     private String status;
 
@@ -18,6 +19,9 @@ public abstract class Pagamento {
     public double getValorBase() { return this.valorBase; }
     public void setValorBase(double valorBase) { this.valorBase = valorBase; }
 
+    public double getValorTotal(){ return this.valorTotal; }
+    public void setValorTotal(double valorTotal) { this.valorTotal = valorTotal; }
+
     public String getTipoPagamento() { return this.tipoPagamento; }
     public void setTipoPagamento(String tipoPagamento) { this.tipoPagamento = tipoPagamento; }
 
@@ -29,10 +33,7 @@ public abstract class Pagamento {
 
     //método concreto para exibir resumo
     public String exibirResumo() {
-        double valorArredondado = Math.round(calcularValorFinal() * 100.0) / 100.0;
         return "Consulta #" + this.indiceConsulta +
-                " | Valor Final: R$" + valorArredondado +
-                " | Tipo: " + this.tipoPagamento +
                 " | Status: " + this.status;
     }
 

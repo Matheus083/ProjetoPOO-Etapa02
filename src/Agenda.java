@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Agenda {
     // R10 - ArrayList escolhido porque a ordem cronológica de marcação das consultas importa
     // e precisamos iterar sequencialmente para gerar relatórios e buscar conflitos de horários.
     private List<Consulta> listaConsultas = new ArrayList<>();
+    private Scanner sc = new Scanner(System.in);
 
     // Método de validação de horário exigido.
     public static boolean validarFormatoHora(String horaStr) {
@@ -105,11 +107,10 @@ public class Agenda {
         throws OperacaoInvalidaException {
         
         boolean encontrada = false;
-        for (Consulta c : listaConsultas) {
-            if(c.cpfPaciente.equals(cpf)){
-                System.out.println(c.exibirResumo());
+        for (int i = 0; i < listaConsultas.size(); i++) {
+            if(listaConsultas.get(i).cpfPaciente.equals(cpf)){
+                System.out.println("Índice: " +i+ "\n" + listaConsultas.get(i).exibirResumo());
                 encontrada = true;
-                break;
             }
         }
         if (!encontrada) {

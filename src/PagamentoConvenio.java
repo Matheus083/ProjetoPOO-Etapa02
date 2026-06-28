@@ -39,7 +39,7 @@ public class PagamentoConvenio extends Pagamento implements Exportavel {
     @Override
     public String exibirResumo() {
         String nome = (this.convenio != null) ? this.convenio.getNome() : "Não informado";
-        return super.exibirResumo() + " | Convênio: " + nome;
+        return super.exibirResumo() + "\nConvênio: " + nome + " | Valor Final: R$ " + this.valorTotal;
     }
 
     @Override

@@ -9,13 +9,15 @@ public class PagamentoPix extends Pagamento implements Exportavel {
 
     @Override
     public double calcularValorFinal() {
-        // já apliquei o desconto de 5% também
-        return this.getValorBase() * 0.95;
+        Double valorTotal = this.getValorBase() * 0.95;
+        this.valorTotal = valorTotal;
+        return valorTotal;
     }
 
     @Override
     public String exibirResumo() {
-        return super.exibirResumo() + " | Chave Pix: " + this.chavePix;
+        return super.exibirResumo() + "\nChave Pix: " + this.chavePix + 
+                                        " | Valor final: R$ " + this.valorTotal;
     }
 
     @Override

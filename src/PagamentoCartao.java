@@ -23,7 +23,7 @@ public class PagamentoCartao extends Pagamento implements Exportavel {
     public String exibirResumo() {
         double valorFinal = calcularValorFinal();
         double valorArredondado = Math.round(valorFinal * 100.0) / 100.0;
-        String resumo = super.exibirResumo() + " | Bandeira: " + this.bandeira + " | Parcelas: " + this.parcelas;
+        String resumo = super.exibirResumo() + "\nBandeira: " + this.bandeira + " | Parcelas: " + this.parcelas + " | Valor Final: R$ " + this.valorTotal;
 
         if (this.parcelas > 1) {
             double valorParcela = Math.round((valorFinal / this.parcelas) * 100.0) / 100.0;
