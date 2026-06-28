@@ -16,6 +16,13 @@ public class Fisioterapeuta extends Profissional {
         this.totalSessoesPrevistas = totalSessoesPrevistas;
     }
 
+    // Inicialização de Profissional com dados completos
+    public Fisioterapeuta(String nome, String cpf, String registro, double valorConsulta) {
+        super(nome, cpf);
+        this.registro = registro;
+        this.valorConsulta = valorConsulta;
+    }
+
     // Acesso dos dados para outra classe
     public int getTotalSessoesPrevistas() { return totalSessoesPrevistas; }
     public void setTotalSessoesPrevistas(int totalSessoesPrevistas) { this.totalSessoesPrevistas = totalSessoesPrevistas; }

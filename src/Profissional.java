@@ -3,9 +3,9 @@ import java.util.List;
 
 public abstract class Profissional extends Pessoa {
 
-    private String registro;
-    private double valorConsulta;
-    private List<HorarioDisponivel> horariosDisponiveis = new ArrayList<>();
+    protected String registro;
+    protected double valorConsulta;
+    protected List<HorarioDisponivel> horariosDisponiveis = new ArrayList<>();
 
     // Inicialização de Profissional apenas com dados base
     protected Profissional(String nome, String cpf) {
@@ -36,7 +36,7 @@ public abstract class Profissional extends Pessoa {
     }
 
     // Método para exibir os dados base do profissional
-    protected void exibirDados() {
+    public void exibirDados() {
         super.exibirDados();
         System.out.println("Registro: " + this.registro);
         System.out.println("Valor da Consulta: R$ " + this.valorConsulta);

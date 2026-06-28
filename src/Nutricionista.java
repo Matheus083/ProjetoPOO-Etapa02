@@ -16,6 +16,13 @@ public class Nutricionista extends Profissional {
         this.planoAlimentar = planoAlimentar;
     }
 
+    // Inicialização de Profissional com dados completos
+    public Nutricionista(String nome, String cpf, String registro, double valorConsulta) {
+        super(nome, cpf);
+        this.registro = registro;
+        this.valorConsulta = valorConsulta;
+    }
+
     // Acesso dos dados para outra classe
     public String getPlanoAlimentar() { return planoAlimentar; }
     public void setPlanoAlimentar(String planoAlimentar) { this.planoAlimentar = planoAlimentar; }

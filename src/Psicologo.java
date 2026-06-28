@@ -16,6 +16,13 @@ public class Psicologo extends Profissional {
         this.abordagem = abordagem;
     }
 
+    // Inicialização de Profissional com dados completos
+    public Psicologo(String nome, String cpf, String registro, double valorConsulta) {
+        super(nome, cpf);
+        this.registro = registro;
+        this.valorConsulta = valorConsulta;
+    }
+
     // Acesso dos dados para outra classe
     public String getAbordagem() { return abordagem; }
     public void setAbordagem(String abordagem) { this.abordagem = abordagem; }

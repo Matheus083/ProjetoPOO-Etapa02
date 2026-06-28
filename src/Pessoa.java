@@ -21,10 +21,10 @@ public abstract class Pessoa {
 
 
 
-    public abstract void MetodoAuxiliar();
+    //public abstract void MetodoAuxiliar();
 
     //Método para mostrar dados do objeto
-    public void exibirDados(){
+    protected void exibirDados(){
         System.out.println("Nome: " + this.nome);
         System.out.println("CPF: " + this.cpf);
 

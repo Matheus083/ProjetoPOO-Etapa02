@@ -110,70 +110,70 @@ public class ClinicaServico {
     public void cadastrarProfissional(String nome, String especialidade, int tipoCadastro){
         
         Profissional profissional;
+        System.out.println("CPF: ");
+        String cpf = sc.nextLine();
+
         //cadastro simples com especialização
         if (tipoCadastro == 1) {
+            
             switch(especialidade){
                 case "clinica geral":
-                    profissional = new ClinicoGeral(nome, especialidade);
+                    profissional = new ClinicoGeral(nome, cpf);
                     mapaProfissionais.put(nome, profissional);
                     todasAsPessoas.add(profissional);
                     break;
 
                 case "fisioterapia":
-                    profissional = new Fisioterapeuta(nome, especialidade);
+                    profissional = new Fisioterapeuta(nome, cpf);
                     mapaProfissionais.put(nome, profissional);
                     todasAsPessoas.add(profissional);
                     break;
                 
                 case "psicologia":
-                    profissional = new Psicologo(nome, especialidade);
+                    profissional = new Psicologo(nome, cpf);
                     mapaProfissionais.put(nome, profissional);
                     todasAsPessoas.add(profissional);
                     break;
                 
                 case "nutricao":
-                    profissional = new Psicologo(nome, especialidade);
+                    profissional = new Psicologo(nome, cpf);
                     mapaProfissionais.put(nome, profissional);
                     todasAsPessoas.add(profissional);
                     break;
             }
         
-        //cadastro com numero de registro e valor de consulta
-        } else if (tipo == 2) {
+        //cadastro completo com especialização
+        } else if (tipoCadastro == 2) {
             System.out.print("Registro: ");
             String reg = sc.nextLine();
             System.out.print("Valor consulta: ");
             double valor = Double.parseDouble(sc.nextLine());
-            profissionais[totalProfissionais] = new Profissional(nome, esp, reg, valor);
+            switch(especialidade){
+                case "clinica geral":
+                    profissional = new ClinicoGeral(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
 
-        //cadastro completo com dias disponíveis    
-        } else {
-            System.out.print("Registro: ");
-            String reg = sc.nextLine();
-            System.out.print("Valor consulta: ");
-            double valor = Double.parseDouble(sc.nextLine());
-            System.out.print("Quantos dias atende? ");
-            int qtd = Integer.parseInt(sc.nextLine());
-            String[] dias = new String[7];
-            for (int i = 0; i < qtd; i++) {
-                System.out.print("Dia " + (i+1) + ": ");
-                dias[i] = sc.nextLine();
+                case "fisioterapia":
+                    profissional = new Fisioterapeuta(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "psicologia":
+                    profissional = new Psicologo(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "nutricao":
+                    profissional = new Psicologo(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
             }
-            profissionais[totalProfissionais] = new Profissional(nome, esp, reg, valor, dias, qtd);
         }
-
-        //Adiciona nas coleções
-        mapaProfissionais.put(nome, novoProfissional);
-        todasAsPessoas.add(novoProfissional);
-        System.out.println("Cadastro finalizado");
-    }
-
-    private boolean validarEspecialidade(String especialidade){
-        
-        if(especialidade.equalsIgnoreCase("clínica geral")){
-            return true
-        }
-        return false;
     }
 
     //Atualizar cadastro só com registro e valor de consultas
@@ -198,7 +198,7 @@ public class ClinicaServico {
     }
 
     //Buscar profissional por nome no Dicionário, retornando um objeto
-    private Profissional buscarProfissionalNome(String nome){
+    public Profissional buscarProfissionalNome(String nome){
         
         //Verifica se a chave existe no mapa
         if (mapaProfissionais == null || !mapaProfissionais.containsKey(nome)) {
@@ -261,35 +261,50 @@ public class ClinicaServico {
     private Agenda agenda = new Agenda();
 
     //Agendar (escolher profissional)
-    public void agendarConsulta(String cpf, String nomeProfissional, String data, String horario, String tipo)
-        throws HorarioIndisponivelException, OperacaoInvalidaException{
+    public void agendarConsulta(String cpf, String nomeProfissional, String data, String horario, String tipo){
         
-        agenda.agendarConsulta(cpf, nomeProfissional, data, horario, tipo);
+        try{
+            agenda.agendarConsulta(cpf, nomeProfissional, data, horario, tipo);
+        }
+        catch (HorarioIndisponivelException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 
     //Cancelar
-    public void cancelarConsulta(String cpf, String data, String horario, String motivo)
-        throws OperacaoInvalidaException{
+    public void cancelarConsulta(String cpf, String data, String horario, String motivo){
 
-        agenda.cancelarConsulta(cpf, data, horario, motivo);
+        try{
+            agenda.cancelarConsulta(cpf, data, horario, motivo);
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 
     //Remarcar
-    public void remarcarConsulta(String cpf, String novaData, String novoHorario)
-        throws OperacaoInvalidaException{
+    public void remarcarConsulta(String cpf, String novaData, String novoHorario){
 
-        agenda.remarcarConsulta(cpf, novaData, novoHorario);
-    }
-
-    //Listar todas as consultas
-    public void listarConsultas(){
-        agenda.exibirResumoConsultas();
+        try{
+            agenda.remarcarConsulta(cpf, novaData, novoHorario);
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 
     //Buscar por CPF
-    public void buscarConsultasPorCpf(String cpf)
-        throws OperacaoInvalidaException{
-        agenda.buscaPorCpf(cpf);
+    public void buscarConsultasPorCpf(String cpf){
+        
+        try{
+            agenda.buscaPorCpf(cpf);
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 /* ============================================================== */
 /*=========================| ATENDIMENTO |=========================*/
@@ -297,17 +312,35 @@ public class ClinicaServico {
     private List<Atendimento> atendimentos = new ArrayList<>(); //Lista de atendimentos
 
     //Registrar atendimento
-    public void registraAtendimento(Atendimento atendimento){
-        atendimentos.add(atendimento);
-    }
+    public void registrarAtendimento(String cpf, int indiceConsulta, String observacao, String diagnostico){
+        
+        Atendimento atendimento = new Atendimento(indiceConsulta, observacao, diagnostico);
+        System.out.println("Deseja adicionar procedimentos? (1-Sim / 2-Não)");
+        Integer op = Integer.parseInt(sc.nextLine());
 
+        if(op == 1){
+            System.out.println("Quantos procedimentos quer adicionar?");
+            Integer resp = Integer.parseInt(sc.nextLine());
+
+            for(int i = 0; i < resp; i++){
+                System.out.println("Procedimento: ");
+                String procedimento = sc.nextLine();
+                atendimento.adicionarProcedimento(procedimento);
+            }
+        }
+        atendimentos.add(atendimento);
+        try{consultas.get(indiceConsulta).realizar();}
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    }
 /* ============================================================== */
 /*=========================| PAGAMENTOS |=========================*/
     
     private List<Pagamento> pagamentos = new ArrayList<>();
     
     //Registrar pagamento
-    public void registrarPagamento(String cpf) throws OperacaoInvalidaException{
+    public void registrarPagamento(String cpf){
         
         buscarConsultasPorCpf(cpf); //Exibe as consultas de um paciente
 
@@ -344,6 +377,20 @@ public class ClinicaServico {
                 break;
         }
     }
+/* ============================================================== */
+/*=========================| RELATÓRIOS |=========================*/
+
+    //Listar todas as consultas
+    public void listarConsultas(){
+        agenda.exibirResumoConsultas();
+    }
+
+    //Listar todos os cadastros
+    public void listarCadastros(){
+        for (Pessoa p : todasAsPessoas){
+            p.exibirDados();
+        }
+    }
 
     //Listar todos os pagamentos
     public void listarPagamentos(){
@@ -351,4 +398,16 @@ public class ClinicaServico {
             System.out.println(p.exibirResumo());
         }
     }
+
+    //Resumo filtrado por profissional
+    public void resumoPorProfissional(String nome){
+
+        //Percorre a lista de Pessoas e exibe as informações só quando a pessoa for um Profissional
+        for(Consulta c : consultas){
+            if(c.getNomeProfissional().equals(nome)){
+                c.exibirResumo();
+            }
+        }
+    }
+/* ============================================================== */
 }

@@ -16,6 +16,13 @@ public class ClinicoGeral extends Profissional {
         this.encaminhamento = encaminhamento;
     }
 
+    // Inicialização de Profissional com dados completos
+    public ClinicoGeral(String nome, String cpf, String registro, double valorConsulta) {
+        super(nome, cpf);
+        this.registro = registro;
+        this.valorConsulta = valorConsulta;
+    }
+
     // Acesso dos dados para outra classe
     public String getEncaminhamento() { return encaminhamento; }
     public void setEncaminhamento(String encaminhamento) { this.encaminhamento = encaminhamento; }

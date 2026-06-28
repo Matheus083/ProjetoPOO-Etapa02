@@ -102,10 +102,10 @@ public class Paciente extends Pessoa {
         return this.convenio != null;
     }
 
-    @Override
+    /*@Override
     public void MetodoAuxiliar(){
         System.out.println("Convenio: " + this.convenio.getNome());
-    }
+    }*/
 
     //Método sobrescrito para exibir dados do Paciente
     @Override

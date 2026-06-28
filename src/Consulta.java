@@ -71,6 +71,8 @@ public class Consulta implements Agendavel, Exportavel { // Adicionado Exportave
         this.status = "realizada";
     }
 
+    public String getNomeProfissional(){ return this.nomeProfissional; }
+
     public String exibirResumo() {
         return "Paciente(CPF): " + cpfPaciente + " | Prof: " + nomeProfissional
                 + " | Data: " + data + " | Hora: " + horario
