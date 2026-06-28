@@ -19,13 +19,18 @@ public abstract class Pessoa {
         return nome;
     }
 
+
+
+    public abstract void MetodoAuxiliar();
+
     //Método para mostrar dados do objeto
-    protected void exibirDados(){
+    public void exibirDados(){
         System.out.println("Nome: " + this.nome);
         System.out.println("CPF: " + this.cpf);
 
     }
 
+    //Setters para validação de dados
     public void setNome(String nome) {
         if (nome == null || nome.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome inválido! O nome do cadastro é obrigatório.");
