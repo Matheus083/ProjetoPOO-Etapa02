@@ -7,9 +7,11 @@ public abstract class Pessoa {
         this.cpf = cpf;
     }
 
+    //Inicialização de Pessoa
+    public Pessoa(){
+    }
 
-
-    //Métodos para acesso em outras classes
+    //Getters para acesso aos dados
     public String getCpf(){
         return cpf;
     }
@@ -17,13 +19,18 @@ public abstract class Pessoa {
         return nome;
     }
 
+
+
+    public abstract void MetodoAuxiliar();
+
     //Método para mostrar dados do objeto
-    protected void exibirDados(){
+    public void exibirDados(){
         System.out.println("Nome: " + this.nome);
         System.out.println("CPF: " + this.cpf);
 
     }
 
+    //Setters para validação de dados
     public void setNome(String nome) {
         if (nome == null || nome.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome inválido! O nome do cadastro é obrigatório.");
@@ -38,7 +45,6 @@ public abstract class Pessoa {
         this.cpf = cpf;
     }
 
-    protected Pessoa(){
-    }
+
 
 }

@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Agenda {
     // R10 - ArrayList escolhido porque a ordem cronológica de marcação das consultas importa
     // e precisamos iterar sequencialmente para gerar relatórios e buscar conflitos de horários.
     private List<Consulta> listaConsultas = new ArrayList<>();
+    private Scanner sc = new Scanner(System.in);
 
     // Método de validação de horário exigido.
     public static boolean validarFormatoHora(String horaStr) {
@@ -75,6 +77,42 @@ public class Agenda {
             }
         }
 
+        if (!encontrada) {
+            throw new OperacaoInvalidaException("Erro: Nenhuma consulta ativa encontrada para os dados informados.");
+        }
+    }
+
+    //Método Centralizado de Remarcação.
+    public void remarcarConsulta(String cpfPaciente, String novaData, String novoHorario)
+        throws OperacaoInvalidaException {
+
+        boolean encontrada = false;
+        for (Consulta c : listaConsultas) {
+            if (c.cpfPaciente.equals(cpfPaciente) && c.data.equals(novaData) && c.horario.equals(novoHorario)) {
+                c.data = novaData;
+                c.horario = novoHorario;    
+                c.remarcar();
+                encontrada = true;
+                System.out.println("Sucesso: " + c.exibirResumo());
+                break;
+            }
+        }
+        if (!encontrada) {
+            throw new OperacaoInvalidaException("Erro: Nenhuma consulta ativa encontrada para os dados informados.");
+        }        
+    }
+
+    //Método para buscar uma consulta pelo cpf do Paciente
+    public void buscaPorCpf(String cpf)
+        throws OperacaoInvalidaException {
+        
+        boolean encontrada = false;
+        for (int i = 0; i < listaConsultas.size(); i++) {
+            if(listaConsultas.get(i).cpfPaciente.equals(cpf)){
+                System.out.println("Índice: " +i+ "\n" + listaConsultas.get(i).exibirResumo());
+                encontrada = true;
+            }
+        }
         if (!encontrada) {
             throw new OperacaoInvalidaException("Erro: Nenhuma consulta ativa encontrada para os dados informados.");
         }
