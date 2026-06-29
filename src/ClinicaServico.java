@@ -15,36 +15,69 @@ public class ClinicaServico {
     private HashSet<String> cpfsCadastrados = new HashSet<>(); //Set para garantir que não existirão cpfs repetidos no sistema
 
     //Cadastra Pacientes
-    public void cadastrarPaciente(Paciente novoPaciente){
+    public void cadastrarPaciente(String nome, String cpf){
 
-        String cpf = novoPaciente.getCpf();
-
-        //Validando se o cpf já existe nos cadastros
+        /*Validando se o cpf já existe nos cadastros
+          Se o cpf for novo, adiciona nas coleções*/
         if(cpfsCadastrados.contains(cpf)){
             System.out.println("Erro: Paciente já cadastrado!"); // TODO: Implementar exception
             return;
         }
-        //Se o cpf for novo, adiciona nas coleções
+
         cpfsCadastrados.add(cpf); //Set
-        mapaPacientes.put(cpf, novoPaciente);
-        todasAsPessoas.add(novoPaciente);
-        novoPaciente.setStatus(true); //Define o status do paciente como ativo
-        System.out.println("Cadastro finalizado");
+
+        //tipo do cadastro
+        System.out.print("Tipo (1-Minimo / 2-Com idade e tel / 3-Completo): ");
+        int tipo = Integer.parseInt(sc.nextLine());
+        Paciente paciente;
+
+        //Estrutura de decisão para executar o tipo correto de cadastro
+        switch(tipo){
+            case 1: //cadastro mínimo
+                paciente = new Paciente(nome, cpf);
+                mapaPacientes.put(cpf, paciente);
+                todasAsPessoas.add(paciente);
+                break; 
+            case 2: //cadastro simples + idade e telefone
+                System.out.print("Idade: ");
+                Integer idade = Integer.parseInt(sc.nextLine());
+                System.out.print("Telefone: ");
+                String tel = sc.nextLine();
+                paciente = new Paciente(nome, cpf, idade, tel);
+                mapaPacientes.put(cpf, paciente);
+                todasAsPessoas.add(paciente);
+                break;
+            case 3: //cadastro completo adicionando as informações de convênio
+                System.out.print("Idade: ");
+                idade = Integer.parseInt(sc.nextLine());
+                System.out.print("Telefone: ");
+                tel = sc.nextLine();
+                System.out.println("--- Informações do convênio ---");
+                System.out.println("Nome do convênio: (saúdeplus / vidamais / bemestar)");
+                String nomeConv = sc.nextLine();
+                Convenio conv = new Convenio(nomeConv);
+                paciente = new Paciente(nome, cpf, conv, tel, idade);
+                mapaPacientes.put(cpf, paciente);
+                todasAsPessoas.add(paciente);
+                break;
+        }
     }
 
     //Atualiza o cadastro de Pacientes com idade e telefone
-    public void atualizarPaciente(Paciente p, int idade, String telefone){
+    public void atualizarPaciente(String cpf, int idade, String telefone){
         
+        Paciente p = buscarPorCpf(cpf);
         p.setIdade(idade);
         p.setTelefone(telefone);
     }
 
     //SOBRECARGA: Atualiza o cadastro de Pacientes com idade, telefone e Convenio
-    public void atualizarPaciente(Paciente p, int idade, String telefone, Convenio convenio){
+    public void atualizarPaciente(String cpf, int idade, String telefone, String nomeConvenio){
         
+        Paciente p = buscarPorCpf(cpf);
         p.setIdade(idade);
         p.setTelefone(telefone);
-        p.setConvenio(convenio);
+        p.getConvenio().setNomeConvenio(nomeConvenio);
     }
 
     //Busca um paciente pelo cpf no Dicionário
@@ -75,14 +108,73 @@ public class ClinicaServico {
     private HashMap<String, Profissional> mapaProfissionais = new HashMap<>(); //Dicionário de profissionais
     
     //Cadastrar profissionais
-    public void cadastrarProfissional(Profissional novoProfissional){
+    public void cadastrarProfissional(String nome, String especialidade, int tipoCadastro){
         
-        String nome = novoProfissional.getNome();
+        Profissional profissional;
+        System.out.println("CPF: ");
+        String cpf = sc.nextLine();
 
-        //Adiciona nas coleções
-        mapaProfissionais.put(nome, novoProfissional);
-        todasAsPessoas.add(novoProfissional);
-        System.out.println("Cadastro finalizado");
+        //cadastro simples com especialização
+        if (tipoCadastro == 1) {
+            
+            switch(especialidade){
+                case "clinica geral":
+                    profissional = new ClinicoGeral(nome, cpf);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+
+                case "fisioterapia":
+                    profissional = new Fisioterapeuta(nome, cpf);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "psicologia":
+                    profissional = new Psicologo(nome, cpf);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "nutricao":
+                    profissional = new Psicologo(nome, cpf);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+            }
+        
+        //cadastro completo com especialização
+        } else if (tipoCadastro == 2) {
+            System.out.print("Registro: ");
+            String reg = sc.nextLine();
+            System.out.print("Valor consulta: ");
+            double valor = Double.parseDouble(sc.nextLine());
+            switch(especialidade){
+                case "clinica geral":
+                    profissional = new ClinicoGeral(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+
+                case "fisioterapia":
+                    profissional = new Fisioterapeuta(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "psicologia":
+                    profissional = new Psicologo(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+                
+                case "nutricao":
+                    profissional = new Psicologo(nome, cpf, reg, valor);
+                    mapaProfissionais.put(nome, profissional);
+                    todasAsPessoas.add(profissional);
+                    break;
+            }
+        }
     }
 
     //Atualizar cadastro só com registro e valor de consultas
@@ -107,7 +199,7 @@ public class ClinicaServico {
     }
 
     //Buscar profissional por nome no Dicionário, retornando um objeto
-    private Profissional buscarProfissionalNome(String nome){
+    public Profissional buscarProfissionalNome(String nome){
         
         //Verifica se a chave existe no mapa
         if (mapaProfissionais == null || !mapaProfissionais.containsKey(nome)) {
@@ -170,35 +262,50 @@ public class ClinicaServico {
     private Agenda agenda = new Agenda();
 
     //Agendar (escolher profissional)
-    public void agendarConsulta(String cpf, String nomeProfissional, String data, String horario, String tipo)
-        throws HorarioIndisponivelException, OperacaoInvalidaException{
+    public void agendarConsulta(String cpf, String nomeProfissional, String data, String horario, String tipo){
         
-        agenda.agendarConsulta(cpf, nomeProfissional, data, horario, tipo);
+        try{
+            agenda.agendarConsulta(cpf, nomeProfissional, data, horario, tipo);
+        }
+        catch (HorarioIndisponivelException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 
     //Cancelar
-    public void cancelarConsulta(String cpf, String data, String horario, String motivo)
-        throws OperacaoInvalidaException{
+    public void cancelarConsulta(String cpf, String data, String horario, String motivo){
 
-        agenda.cancelarConsulta(cpf, data, horario, motivo);
+        try{
+            agenda.cancelarConsulta(cpf, data, horario, motivo);
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 
     //Remarcar
-    public void remarcarConsulta(String cpf, String novaData, String novoHorario)
-        throws OperacaoInvalidaException{
+    public void remarcarConsulta(String cpf, String novaData, String novoHorario){
 
-        agenda.remarcarConsulta(cpf, novaData, novoHorario);
-    }
-
-    //Listar todas as consultas
-    public void listarConsultas(){
-        agenda.exibirResumoConsultas();
+        try{
+            agenda.remarcarConsulta(cpf, novaData, novoHorario);
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 
     //Buscar por CPF
-    public void buscarConsultasPorCpf(String cpf)
-        throws OperacaoInvalidaException{
-        agenda.buscaPorCpf(cpf);
+    public void buscarConsultasPorCpf(String cpf){
+        
+        try{
+            agenda.buscaPorCpf(cpf);
+        }
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
 /* ============================================================== */
 /*=========================| ATENDIMENTO |=========================*/
@@ -206,17 +313,35 @@ public class ClinicaServico {
     private List<Atendimento> atendimentos = new ArrayList<>(); //Lista de atendimentos
 
     //Registrar atendimento
-    public void registraAtendimento(Atendimento atendimento){
-        atendimentos.add(atendimento);
-    }
+    public void registrarAtendimento(String cpf, int indiceConsulta, String observacao, String diagnostico){
+        
+        Atendimento atendimento = new Atendimento(indiceConsulta, observacao, diagnostico);
+        System.out.println("Deseja adicionar procedimentos? (1-Sim / 2-Não)");
+        Integer op = Integer.parseInt(sc.nextLine());
 
+        if(op == 1){
+            System.out.println("Quantos procedimentos quer adicionar?");
+            Integer resp = Integer.parseInt(sc.nextLine());
+
+            for(int i = 0; i < resp; i++){
+                System.out.println("Procedimento: ");
+                String procedimento = sc.nextLine();
+                atendimento.adicionarProcedimento(procedimento);
+            }
+        }
+        atendimentos.add(atendimento);
+        try{consultas.get(indiceConsulta).realizar();}
+        catch (OperacaoInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    }
 /* ============================================================== */
 /*=========================| PAGAMENTOS |=========================*/
     
     private List<Pagamento> pagamentos = new ArrayList<>();
     
     //Registrar pagamento
-    public void registrarPagamento(String cpf) throws OperacaoInvalidaException{
+    public void registrarPagamento(String cpf){
         
         buscarConsultasPorCpf(cpf); //Exibe as consultas de um paciente
 
@@ -253,6 +378,20 @@ public class ClinicaServico {
                 break;
         }
     }
+/* ============================================================== */
+/*=========================| RELATÓRIOS |=========================*/
+
+    //Listar todas as consultas
+    public void listarConsultas(){
+        agenda.exibirResumoConsultas();
+    }
+
+    //Listar todos os cadastros
+    public void listarCadastros(){
+        for (Pessoa p : todasAsPessoas){
+            p.exibirDados();
+        }
+    }
 
     //Listar todos os pagamentos
     public void listarPagamentos(){
@@ -260,4 +399,16 @@ public class ClinicaServico {
             System.out.println(p.exibirResumo());
         }
     }
+
+    //Resumo filtrado por profissional
+    public void resumoPorProfissional(String nome){
+
+        //Percorre a lista de Pessoas e exibe as informações só quando a pessoa for um Profissional
+        for(Consulta c : consultas){
+            if(c.getNomeProfissional().equals(nome)){
+                c.exibirResumo();
+            }
+        }
+    }
+/* ============================================================== */
 }
