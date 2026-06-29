@@ -40,7 +40,7 @@ public class ClinicaServico {
                 break; 
             case 2: //cadastro simples + idade e telefone
                 System.out.print("Idade: ");
-                int idade = Integer.parseInt(sc.nextLine());
+                Integer idade = Integer.parseInt(sc.nextLine());
                 System.out.print("Telefone: ");
                 String tel = sc.nextLine();
                 paciente = new Paciente(nome, cpf, idade, tel);
@@ -52,7 +52,8 @@ public class ClinicaServico {
                 idade = Integer.parseInt(sc.nextLine());
                 System.out.print("Telefone: ");
                 tel = sc.nextLine();
-                System.out.print("--- Informações do convênio ---");
+                System.out.println("--- Informações do convênio ---");
+                System.out.println("Nome do convênio: (saúdeplus / vidamais / bemestar)");
                 String nomeConv = sc.nextLine();
                 Convenio conv = new Convenio(nomeConv);
                 paciente = new Paciente(nome, cpf, conv, tel, idade);

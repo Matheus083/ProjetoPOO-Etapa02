@@ -100,7 +100,7 @@ public class Main {
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
 
-        cs.buscarPorCpf(cpf);
+        cs.buscarPorCpf(cpf).exibirDados();;
     }
 
     public static void listarPacientes() {
@@ -181,7 +181,7 @@ public class Main {
     }
 
     public static void filtrarProfissionais() {
-        System.out.print("Especialidade: (1-Clinica geral / 2-Fisioterapia / 3-Nutricao / 4-Psicologia");
+        System.out.println("Selecione o numero da especialidade: (1-Clinica geral / 2-Fisioterapia / 3-Nutricao / 4-Psicologia");
         Integer esp = Integer.parseInt(sc.nextLine());
 
         cs.listarProfissionais(esp);
@@ -238,7 +238,7 @@ public class Main {
             cs.agendarConsulta(cpf, nomeProf, data, horario, tipo);
         }
         
-        System.out.println("Consulta agendada com sucesso!");
+        System.out.println("Encerrando agendamento...");
     }
 
     public static void cancelarConsulta() {
@@ -373,7 +373,7 @@ public class Main {
 
             switch (op) {
                 case 1:
-                    cs.listarConsultas();;
+                    cs.listarConsultas();
                     break;
                 case 2:
                     System.out.print("Nome do profissional: ");
